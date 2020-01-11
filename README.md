@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # T-Mobile Coding Challenge
 
 ### Important! Read this First !
@@ -85,6 +84,3 @@ same data. If a query is not in cache we should call-through to the API.
 _**Implement the solution and make a PR from the branch `feat_proxy_server` to `master`**_
 
 > It is important to get the implementation working before trying to organize and clean it up.
-=======
-# rex-programme
->>>>>>> 0140bb35633ed2d00a2f7e23c7925f70fb242295
