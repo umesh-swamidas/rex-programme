@@ -13,9 +13,8 @@ export function sortByDateNumeric(a: PriceQuery, b: PriceQuery): number {
   return a.dateNumeric - b.dateNumeric;
 }
 
-export const priceQueryAdapter: EntityAdapter<PriceQuery> = createEntityAdapter<
-  PriceQuery
->({
+export const priceQueryAdapter: EntityAdapter<PriceQuery> = createEntityAdapter<PriceQuery>
+ ({
   selectId: (priceQuery: PriceQuery) => priceQuery.dateNumeric,
   sortComparer: sortByDateNumeric
 });
