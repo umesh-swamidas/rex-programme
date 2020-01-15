@@ -11,6 +11,8 @@ export class StocksComponent implements OnInit {
   stockPickerForm: FormGroup;
   symbol: string;
   period: string;
+  fromDate: string;
+  toDate: string;
 
   quotes$ = this.priceQuery.priceQueries$;
 
@@ -26,6 +28,7 @@ export class StocksComponent implements OnInit {
   ];
 
   constructor(private fb: FormBuilder, private priceQuery: PriceQueryFacade) {
+    // Comment - what does this do?
     this.stockPickerForm = fb.group({
       symbol: [null, Validators.required],
       period: [null, Validators.required]
