@@ -15,9 +15,8 @@
     </mat-error>
   </mat-form-field>
 
-  <mat-form-field>
+  <!-- <mat-form-field>
     <mat-label>Favorite time period</mat-label>
-    <!-- Comment: Solution to Task 2 -->
     <mat-select formControlName="period" (selectionChange)="fetchQuote()">
       <mat-option
         *ngFor="let timePeriod of timePeriods"
@@ -25,9 +24,21 @@
         {{ timePeriod.viewValue }}
       </mat-option>
     </mat-select>
+  </mat-form-field> -->
+
+  <mat-form-field>
+    <input matInput [matDatepicker]="fromDate" formControlName="fromDate" placeholder="From date">
+    <mat-datepicker-toggle matSuffix [for]="fromDate"></mat-datepicker-toggle>
+    <mat-datepicker #fromDate></mat-datepicker>
   </mat-form-field>
-  
-  <!-- <button (click)="fetchQuote()" mat-raised-button>Go</button>-->
+
+  <mat-form-field>
+    <input matInput [matDatepicker]="toDate" formControlName="toDate" placeholder="To date">
+    <mat-datepicker-toggle matSuffix [for]="toDate"></mat-datepicker-toggle>
+    <mat-datepicker #toDate></mat-datepicker>
+  </mat-form-field>
+
+  <button (click)="fetchQuote()" mat-raised-button>Go</button>
 </form>
 
 <coding-challenge-chart [data$]="quotes$"></coding-challenge-chart>
