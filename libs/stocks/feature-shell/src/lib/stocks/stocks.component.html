@@ -6,27 +6,36 @@
       formControlName="symbol"
       value=""
     />
-    <mat-error
-      ><span
+    <mat-error>
+      <span
         *ngIf="
           !stockPickerForm.get('symbol').valid &&
           stockPickerForm.get('symbol').touched
-        "
-        >Please enter a symbol</span
-      >
+        ">Please enter a symbol</span>
     </mat-error>
   </mat-form-field>
 
-  <mat-form-field>
+  <!-- <mat-form-field>
     <mat-label>Favorite time period</mat-label>
-    <mat-select formControlName="period">
+    <mat-select formControlName="period" (selectionChange)="fetchQuote()">
       <mat-option
         *ngFor="let timePeriod of timePeriods"
-        [value]="timePeriod.value"
-      >
+        [value]="timePeriod.value">
         {{ timePeriod.viewValue }}
       </mat-option>
     </mat-select>
+  </mat-form-field> -->
+
+  <mat-form-field>
+    <input matInput [matDatepicker]="fromDate" formControlName="fromDate" placeholder="From date" [max]="maxDate" >
+    <mat-datepicker-toggle matSuffix [for]="fromDate"></mat-datepicker-toggle>
+    <mat-datepicker #fromDate></mat-datepicker>
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput [matDatepicker]="toDate" formControlName="toDate" placeholder="To date" [max]="maxDate">
+    <mat-datepicker-toggle matSuffix [for]="toDate"></mat-datepicker-toggle>
+    <mat-datepicker #toDate></mat-datepicker>
   </mat-form-field>
 
   <button (click)="fetchQuote()" mat-raised-button>Go</button>
