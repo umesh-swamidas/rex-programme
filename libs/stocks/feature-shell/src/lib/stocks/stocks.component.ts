@@ -12,6 +12,7 @@ import {DateUtils} from "./utils/date-utils";
 export class StocksComponent implements OnInit {
   stockPickerForm: FormGroup;
   quotes$ = this.priceQuery.priceQueries$;
+  maxDate: Date = new Date();
 
   constructor(private fb: FormBuilder, private priceQuery: PriceQueryFacade, private datePipe: DatePipe) {
     this.stockPickerForm = fb.group({
@@ -32,7 +33,7 @@ export class StocksComponent implements OnInit {
       const diff: number = Math.floor((Date.parse(current_date.replace(/-/g, '\/')) -
         Date.parse(from_date.replace(/-/g, '\/'))) / 86400000);
       const period = DateUtils.getRange(diff + 1).toString();
-      this.priceQuery.fetchQuote(symbol, period);
+      this.priceQuery.fetchQuote(symbol, period, from_date, to_date);
     }
   }
 

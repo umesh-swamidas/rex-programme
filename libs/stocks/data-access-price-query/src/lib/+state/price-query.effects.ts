@@ -29,7 +29,7 @@ export class PriceQueryEffects {
             }?token=${this.env.apiKey}`
           )
           .pipe(
-            //filter(resp => resp.date !== null),
+            map((a: PriceQueryResponse[]) => a.filter( r => (new Date(r.date) >= new Date(action.fromDate) && new Date(r.date)  <= new Date(action.toDate)))),
             map(resp => new PriceQueryFetched(resp as PriceQueryResponse[]))
           )},
 
