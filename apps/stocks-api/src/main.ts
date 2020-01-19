@@ -3,6 +3,11 @@
  * This is only a minimal backend to get started.
  **/
 import { Server } from 'hapi';
+import { environment } from './environments/environment';
+
+const axios = require( 'axios' );
+const nodeCache = require( 'node-cache' );
+const myCache = new nodeCache(3600, 300);
 
 const init = async () => {
   const server = new Server({
@@ -10,41 +15,34 @@ const init = async () => {
     host: 'localhost'
   });
 
-  const httpRequest = require('request');
-
   server.route({
     method: 'GET',
-    path: '/',
-    handler: (request, reply) => {
-      console.log('request.params: ' + request.params);
-      console.log('request.path: ' + request.path);
-      console.log('request.query: ' + Object.prototype.hasOwnProperty.call(request.query, 'token'));
-      /*return {
-        hello: 'umesh'
-      };*/
-
-      let httpResponse: any = {};
-      httpRequest('https://sandbox.iexapis.com/stable/stock/AAPL/chart/1m?token=Tpk_cb788a12066c4676b4a6f74dac0ba44c', (error, response, body) => {
-        console.error('error:', error);
-        console.log('statusCode:', response && response.statusCode);
-        console.log('body:', body);
-        httpResponse = body;
-        //reply.response(body);
-        //console.log('HTTP Response:', reply);
-        //return reply;
-        /*httpResponse = {
-          hello: 'umesh'
-        };*/
-      });
-
-    /* httpRequest('https://sandbox.iexapis.com/stable/stock/AAPL/chart/1m?token=Tpk_cb788a12066c4676b4a6f74dac0ba44c')
-        .on('response', function(response) {
-          console.log(response.statusCode)
-          console.log(response.headers['content-type'])
-          httpResponse = response.body;
-        });*/
-      //console.log('HTTP Response:', reply);
-      return httpResponse;
+    path: '/beta/stock/{symbol}/chart/{period}',
+    handler: async (request, reply) => {
+      const symbol: string = request.params.symbol;
+      const period: string = request.params.period;
+      /*
+      * Candidate's comments:
+      * The caching mechanism can be further enhanced to check whether the requested data
+      * is a subset of data that already exists in the cache. For e.g. if the user requests
+      * for data for a time period of 1m and the cache already has data for 5y, the cached
+      * data can be returned.
+      * */
+      const cacheKey = symbol.concat(period);
+      const cachedValue = myCache.get(cacheKey);
+      if (cachedValue){
+        return reply.response(cachedValue);
+      } else {
+        const url: string = environment.apiURL + request.path.replace('{symbol}', symbol).replace('{period}', period) + '?token=' + environment.apiKey;
+        const httpResponse = await axios.get(url)
+          .catch((err = new Error()) => {
+            return reply.response('Error while fetching data').code(500);
+          });
+        if(httpResponse && httpResponse.data){
+          myCache.set( cacheKey, httpResponse.data, 60 );
+        }
+        return reply.response(httpResponse.data);
+      }
     }
   });
 
