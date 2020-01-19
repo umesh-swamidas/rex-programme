@@ -15,25 +15,26 @@
     </mat-error>
   </mat-form-field>
 
-  <!-- <mat-form-field>
-    <mat-label>Favorite time period</mat-label>
-    <mat-select formControlName="period" (selectionChange)="fetchQuote()">
-      <mat-option
-        *ngFor="let timePeriod of timePeriods"
-        [value]="timePeriod.value">
-        {{ timePeriod.viewValue }}
-      </mat-option>
-    </mat-select>
-  </mat-form-field> -->
-
   <mat-form-field>
-    <input matInput [matDatepicker]="fromDate" formControlName="fromDate" placeholder="From date" readonly [max]="maxDate">
+    <input matInput
+           [matDatepicker]="fromDate"
+           formControlName="fromDate"
+           placeholder="From date"
+           readonly
+           [max]="maxDate">
     <mat-datepicker-toggle matSuffix [for]="fromDate"></mat-datepicker-toggle>
     <mat-datepicker #fromDate></mat-datepicker>
   </mat-form-field>
-
+  <!-- Candidate's comment: Slight deviation from the actual ask in Task 3 - "to" cannot be before "from" (selecting an invalid range should make both dates the same value).
+  Instead the date picker won't even let the use select a toDate that is before the fromDate. See below the [min] value configured. -->
   <mat-form-field>
-    <input matInput [matDatepicker]="toDate" formControlName="toDate" placeholder="To date" readonly [max]="maxDate">
+    <input matInput
+           [matDatepicker]="toDate"
+           formControlName="toDate"
+           placeholder="To date"
+           readonly
+           [min]=stockPickerForm.controls.fromDate.value
+           [max]="maxDate">
     <mat-datepicker-toggle matSuffix [for]="toDate"></mat-datepicker-toggle>
     <mat-datepicker #toDate></mat-datepicker>
   </mat-form-field>

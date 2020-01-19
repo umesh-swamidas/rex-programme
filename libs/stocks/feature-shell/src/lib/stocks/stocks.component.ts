@@ -27,6 +27,9 @@ export class StocksComponent implements OnInit {
   public fetchQuote(): void {
     if (this.stockPickerForm.valid) {
       const { symbol, fromDate, toDate } = this.stockPickerForm.value;
+      /* Candidate's comments:
+       * The below code can be further simplified using third party libraries like moment.js which abstracts ghe below logic into ready made functions
+       */
       const from_date: string = this.datePipe.transform(fromDate, 'yyyy-MM-dd');
       const to_date: string = this.datePipe.transform(toDate, 'yyyy-MM-dd');
       const current_date: string = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
