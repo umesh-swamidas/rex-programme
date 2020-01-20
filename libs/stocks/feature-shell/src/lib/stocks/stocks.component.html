@@ -5,6 +5,8 @@
       placeholder="Symbol e.g AAPL"
       formControlName="symbol"
       value=""
+      maxlength=5
+      (ngModelChange)="this.symbolUpdate.next($event)"
     />
     <mat-error>
       <span
@@ -15,7 +17,7 @@
     </mat-error>
   </mat-form-field>
 
-  <!-- <mat-form-field>
+  <mat-form-field>
     <mat-label>Favorite time period</mat-label>
     <mat-select formControlName="period" (selectionChange)="fetchQuote()">
       <mat-option
@@ -24,21 +26,7 @@
         {{ timePeriod.viewValue }}
       </mat-option>
     </mat-select>
-  </mat-form-field> -->
-
-  <mat-form-field>
-    <input matInput [matDatepicker]="fromDate" formControlName="fromDate" placeholder="From date" [max]="maxDate" >
-    <mat-datepicker-toggle matSuffix [for]="fromDate"></mat-datepicker-toggle>
-    <mat-datepicker #fromDate></mat-datepicker>
   </mat-form-field>
-
-  <mat-form-field>
-    <input matInput [matDatepicker]="toDate" formControlName="toDate" placeholder="To date" [max]="maxDate">
-    <mat-datepicker-toggle matSuffix [for]="toDate"></mat-datepicker-toggle>
-    <mat-datepicker #toDate></mat-datepicker>
-  </mat-form-field>
-
-  <button (click)="fetchQuote()" mat-raised-button>Go</button>
 </form>
 
 <coding-challenge-chart [data$]="quotes$"></coding-challenge-chart>
