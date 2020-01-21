@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import { PriceQueryFacade } from '@coding-challenge/stocks/data-access-price-query';
+import {DatePipe} from "@angular/common";
+import {DateUtils} from "./utils/date-utils";
 
 @Component({
   selector: 'coding-challenge-stocks',
@@ -9,35 +11,34 @@ import { PriceQueryFacade } from '@coding-challenge/stocks/data-access-price-que
 })
 export class StocksComponent implements OnInit {
   stockPickerForm: FormGroup;
-  symbol: string;
-  period: string;
-
   quotes$ = this.priceQuery.priceQueries$;
+  currentDate: Date = new Date();
 
-  timePeriods = [
-    { viewValue: 'All available data', value: 'max' },
-    { viewValue: 'Five years', value: '5y' },
-    { viewValue: 'Two years', value: '2y' },
-    { viewValue: 'One year', value: '1y' },
-    { viewValue: 'Year-to-date', value: 'ytd' },
-    { viewValue: 'Six months', value: '6m' },
-    { viewValue: 'Three months', value: '3m' },
-    { viewValue: 'One month', value: '1m' }
-  ];
-
-  constructor(private fb: FormBuilder, private priceQuery: PriceQueryFacade) {
+  constructor(private fb: FormBuilder, private priceQuery: PriceQueryFacade, private datePipe: DatePipe) {
     this.stockPickerForm = fb.group({
       symbol: [null, Validators.required],
-      period: [null, Validators.required]
+      fromDate: [null, Validators.required],
+      toDate: [null, Validators.required]
     });
   }
 
   ngOnInit() {}
 
-  fetchQuote() {
+  public fetchQuote(): void {
     if (this.stockPickerForm.valid) {
-      const { symbol, period } = this.stockPickerForm.value;
-      this.priceQuery.fetchQuote(symbol, period);
+      const { symbol, fromDate, toDate } = this.stockPickerForm.value;
+      /* Candidate's comments:
+       * The below code can be further simplified using third party libraries like moment.js which abstracts the below logic into ready made functions.
+       * Here the period relative to the current date is calculated and sent to the public API
+       */
+      const from_date: string = this.datePipe.transform(fromDate, 'yyyy-MM-dd');
+      const to_date: string = this.datePipe.transform(toDate, 'yyyy-MM-dd');
+      const current_date: string = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
+      const diff: number = Math.floor((Date.parse(current_date.replace(/-/g, '\/')) -
+        Date.parse(from_date.replace(/-/g, '\/'))) / 86400000);
+      const period = DateUtils.getPeriodRelativeToCurrentDate(diff + 1).toString();
+      this.priceQuery.fetchQuote(symbol, period, from_date, to_date);
     }
   }
+
 }
