@@ -21,7 +21,7 @@
            formControlName="fromDate"
            placeholder="From date"
            readonly
-           [max]="maxDate">
+           [max]="currentDate">
     <mat-datepicker-toggle matSuffix [for]="fromDate"></mat-datepicker-toggle>
     <mat-datepicker #fromDate></mat-datepicker>
   </mat-form-field>
@@ -34,7 +34,7 @@
            placeholder="To date"
            readonly
            [min]=stockPickerForm.controls.fromDate.value
-           [max]="maxDate">
+           [max]="currentDate">
     <mat-datepicker-toggle matSuffix [for]="toDate"></mat-datepicker-toggle>
     <mat-datepicker #toDate></mat-datepicker>
   </mat-form-field>

@@ -11,7 +11,7 @@ export class DateUtils {
   * The function is made static as the class doesn't hold state. Hence the class can be used
   * as a utility with the need of an instance to call the function.
   * */
-  public static getRange(noOfDays: number): string[] {
+  public static getPeriodRelativeToCurrentDate(noOfDays: number): string[] {
     const timePeriods = [
       { period: '1d', min: 1, max: 1 }, // 1 day
       { period: '5d', min: 2, max: 5 }, // 5 days
