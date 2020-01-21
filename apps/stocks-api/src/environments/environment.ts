@@ -7,5 +7,15 @@ import {StocksAppConfig} from "@coding-challenge/stocks/data-access-app-config";
 export const environment: StocksAppConfig = {
   production: false,
   apiKey: 'Tpk_cb788a12066c4676b4a6f74dac0ba44c',
-  apiURL: 'https://sandbox.iexapis.com'
+  apiURL: 'https://sandbox.iexapis.com/beta/stock',
+};
+
+export const cacheConfig = {
+  stdTTL: 3600,
+  checkPeriod: 300,
+  ttl: 60
+};
+
+export const httpConnectionConfig = {
+  connectionTimeout: 5000
 };

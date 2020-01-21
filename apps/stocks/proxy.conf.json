@@ -3,7 +3,7 @@
     "target": "http://localhost:3333",
     "secure": false,
     "pathRewrite": {
-      "^/api": ""
+      "^/api/beta/stock": ""
     }
   }
 }
