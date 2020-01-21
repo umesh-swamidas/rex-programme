@@ -9,8 +9,9 @@ import { PriceQueryFacade } from '@coding-challenge/stocks/data-access-price-que
 })
 export class StocksComponent implements OnInit {
   stockPickerForm: FormGroup;
-  symbol: string;
-  period: string;
+  // No need for these instance variables as these can be directly obtained from the form control object
+  //symbol: string;
+  //period: string;
 
   quotes$ = this.priceQuery.priceQueries$;
 
