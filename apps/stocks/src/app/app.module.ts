@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { BrowserModule } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
@@ -37,7 +38,10 @@ import { environment } from '../environments/environment';
         persist: true
       }
     }),
-    StocksDataAccessPriceQueryModule
+    StocksDataAccessPriceQueryModule,
+    // Import ReactiveFormsModule - for model driven forms. Each form has a state that can be updated by many different interactions
+    FormsModule,
+    ReactiveFormsModule
   ],
   providers: [{ provide: StocksAppConfigToken, useValue: environment }],
   bootstrap: [AppComponent]
