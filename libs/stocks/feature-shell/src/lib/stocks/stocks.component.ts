@@ -36,9 +36,10 @@ export class StocksComponent implements OnInit {
 
   ngOnInit() {
     /* Candidate's comment: Without debounceTime, each keystroke in the 'Symbol' input field would
-     * trigger an API call to the backend resulting in heavy load on the backend. Here we subscribe to
-     * changes in value and call the fetchQuote() accordingly. The subscription is removed in ngDestroy()
-     * as soon as the component is destroyed.
+     * trigger an API call to the backend resulting in heavy load on the backend. In the below solution,
+     * the debounceTime is configured for just 500ms. It can be increased/decreased  as per need. Here we
+     * subscribe to changes in value and call the fetchQuote() accordingly. The subscription is removed in
+     * ngDestroy() as soon as the component is destroyed.
      */
     this.symbolUpdate.pipe(
       debounceTime(500),
@@ -54,6 +55,8 @@ export class StocksComponent implements OnInit {
       this.priceQuery.fetchQuote(symbol, period);
     }
   }
+
+  // Remove the subscriptions as soon as the component is destroyed
   ngDestroy(){
     this.symbolUpdate.unsubscribe();
   }
