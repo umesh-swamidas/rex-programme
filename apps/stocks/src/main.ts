@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
 * Candidate's comments:
 * Some of the good things observed here:
 * 1. Separate apps for front-end and backend applications.
-* 2. Rather than trying to overload the main apps, the logic is divided between components in the lib and then loaded in the app module.
+* 2. Rather than trying to overload the main apps, the actual logic is loaded from different modules in lib.
 * 3. Usage of @ngrx/store . Rather than relying on services, comprehensive usage of store can be seen.
 *
 * Some of the improvements/issues observed:
