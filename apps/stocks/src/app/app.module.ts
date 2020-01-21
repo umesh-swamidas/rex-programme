@@ -17,6 +17,7 @@ import { environment } from '../environments/environment';
   imports: [
     BrowserModule.withServerTransition({ appId: 'serverApp' }),
     CommonModule,
+    // Comment: Have a separate routes file to define the routes
     RouterModule.forRoot([
       {
         path: '',

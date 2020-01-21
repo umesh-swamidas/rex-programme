@@ -5,31 +5,28 @@
       placeholder="Symbol e.g AAPL"
       formControlName="symbol"
       value=""
+      maxlength=5
+      (ngModelChange)="this.symbolUpdate.next($event)"
     />
-    <mat-error
-      ><span
+    <mat-error>
+      <span
         *ngIf="
           !stockPickerForm.get('symbol').valid &&
           stockPickerForm.get('symbol').touched
-        "
-        >Please enter a symbol</span
-      >
+        ">Please enter a symbol</span>
     </mat-error>
   </mat-form-field>
 
   <mat-form-field>
     <mat-label>Favorite time period</mat-label>
-    <mat-select formControlName="period">
+    <mat-select formControlName="period" (selectionChange)="fetchQuote()">
       <mat-option
         *ngFor="let timePeriod of timePeriods"
-        [value]="timePeriod.value"
-      >
+        [value]="timePeriod.value">
         {{ timePeriod.viewValue }}
       </mat-option>
     </mat-select>
   </mat-form-field>
-
-  <button (click)="fetchQuote()" mat-raised-button>Go</button>
 </form>
 
 <coding-challenge-chart [data$]="quotes$"></coding-challenge-chart>

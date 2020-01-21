@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PriceQueryFacade } from '@coding-challenge/stocks/data-access-price-query';
+import {debounceTime, distinctUntilChanged, switchMap} from "rxjs/operators";
+import {Subject} from "rxjs";
 
 @Component({
   selector: 'coding-challenge-stocks',
@@ -8,12 +10,10 @@ import { PriceQueryFacade } from '@coding-challenge/stocks/data-access-price-que
   styleUrls: ['./stocks.component.css']
 })
 export class StocksComponent implements OnInit {
+
+  // Candidate's comments: class variables symbol and period removed. The values can be directly obtained from the form control object
   stockPickerForm: FormGroup;
-  symbol: string;
-  period: string;
-
   quotes$ = this.priceQuery.priceQueries$;
-
   timePeriods = [
     { viewValue: 'All available data', value: 'max' },
     { viewValue: 'Five years', value: '5y' },
@@ -24,6 +24,8 @@ export class StocksComponent implements OnInit {
     { viewValue: 'Three months', value: '3m' },
     { viewValue: 'One month', value: '1m' }
   ];
+  // To subscribe to the change in values as entered by the user
+  symbolUpdate = new Subject<string>();
 
   constructor(private fb: FormBuilder, private priceQuery: PriceQueryFacade) {
     this.stockPickerForm = fb.group({
@@ -32,12 +34,30 @@ export class StocksComponent implements OnInit {
     });
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    /* Candidate's comment: Without debounceTime, each keystroke in the 'Symbol' input field would
+     * trigger an API call to the backend resulting in heavy load on the backend. In the below solution,
+     * the debounceTime is configured for just 500ms. It can be increased/decreased  as per need. Here we
+     * subscribe to changes in value and call the fetchQuote() accordingly. The subscription is removed in
+     * ngDestroy() as soon as the component is destroyed.
+     */
+    this.symbolUpdate.pipe(
+      debounceTime(500),
+      distinctUntilChanged())
+      .subscribe(() => {
+        this.fetchQuote();
+      });
+  }
 
   fetchQuote() {
     if (this.stockPickerForm.valid) {
       const { symbol, period } = this.stockPickerForm.value;
       this.priceQuery.fetchQuote(symbol, period);
     }
+  }
+
+  // Remove the subscriptions as soon as the component is destroyed
+  ngDestroy(){
+    this.symbolUpdate.unsubscribe();
   }
 }
